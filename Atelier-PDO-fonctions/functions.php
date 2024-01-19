@@ -7,16 +7,6 @@ function getPDO(string $dsn, string $user, string $mdp) : PDO {
 
 
 
-
-// function getPostsWithCategories(PDO $pdo, int $page, int $perPage) : array {
-//     $query = $pdo -> query('SELECT p.id, p.title, p.excerpt, p.created_at, c.name AS category_name
-//         FROM posts p
-//         LEFT JOIN categories c ON p.category_id = c.id
-//         ORDER BY p.created_at DESC');
-
-//     return $query -> fetchAll(PDO::FETCH_ASSOC);
-// }
-
 function getPostsWithCategories(PDO $pdo, int $page, int $perPage) : array {
 
     // On détermine le nombre total d'articles
@@ -29,6 +19,7 @@ function getPostsWithCategories(PDO $pdo, int $page, int $perPage) : array {
     
     $nbArticles = (int) $result['nb_articles'];
 
+    // On calcule quel sera le premier article à afficher sur la page choisie
      $premier = ($page * $perPage) - $perPage;
  
      $query = $pdo -> prepare('SELECT p.id, p.title, p.excerpt, p.created_at, p.updated_at, c.name AS category_name
@@ -77,8 +68,10 @@ function getPostsByCategory(PDO $pdo, int $category_id, int $page, int $perPage)
     // On récupère le nombre d'articles
     $result = $query -> fetch();
 
+    // On stocke le résultat du nombre total d'articles du la variable $nbArticles
     $nbArticles = (int) $result['nb_articles'];
 
+    // On calcule quel sera le premier article à afficher sur la page choisie
     $premier = ($page * $perPage) - $perPage;
 
     $query = $pdo -> prepare('SELECT p.title, p.excerpt, p.created_at, p.category_id, c.name AS category_name
@@ -101,6 +94,7 @@ function getPostsByCategory(PDO $pdo, int $category_id, int $page, int $perPage)
 
 function createPost(PDO $pdo, string $title, string $body, string $excerpt) {
 
+    // On vérifie avec une structure conditionnelle IF que nos champs ne soit pas vide, (pour éviter de rentrer une ligne vide dans notre BDD)
     if(! empty($_POST['title'] && $_POST['body'] && $_POST['excerpt'])) {
 
         $query = $pdo -> prepare('INSERT INTO posts (title, body, excerpt) VALUES (:title, :body, :excerpt)');
@@ -147,6 +141,7 @@ function deletePost(PDO $pdo, int $id) {
 
 function addComment(PDO $pdo, int $post_id, string $content) {
 
+    // On vérifie avec une structure conditionnelle IF que notre champ ne soit pas vide, (pour éviter de rentrer une ligne vide dans notre BDD)
     if(! empty($_POST['content'])) {
 
         $query = $pdo -> prepare('INSERT INTO comments (content, post_id) VALUES (:content, :post_id)');
