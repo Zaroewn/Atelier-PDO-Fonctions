@@ -2,10 +2,11 @@
     
     $pdo = getPDO('mysql:host=localhost;dbname=blog', 'root', '');
 
+    // On vérifie avec une structure conditionnelle IF que nos champs ne soit pas vide, (pour éviter de rentrer une ligne vide dans notre BDD)
     if (! empty($_POST)) {
         $errors = [];
     
-    
+        // Si il n'y a pas d'erreurs, on lance la création du post via notre fonction createPost().
         if (! $errors) {
             createPost($pdo, $_POST['title'], $_POST['body'], $_POST['excerpt']);
         }
