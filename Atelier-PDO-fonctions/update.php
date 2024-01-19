@@ -2,16 +2,20 @@
     require_once __DIR__.'/functions.php';
     
     $pdo = getPDO('mysql:host=localhost;dbname=blog', 'root', '');
-        
+       
+    // On vérifie avec une structure conditionnelle IF que nos champs ne soit pas vide.
     if (! empty($_POST)) {
         $errors = [];
         
-    
+        // Si il n'y a pas d'erreurs, on lance la modification du post via notre fonction updatePost().
         if (! $errors) {
             updatePost($pdo, $_GET['id'], $_POST['title'], $_POST['body'], $_POST['excerpt']);
         }
     }
 
+    
+// Ici on appelle notre fonction getPostWithCategory() après la structure conditionnelle IF, pour pouvoir récupérer les informations de nos posts dans nos zones de formulaire
+// afin de pouvoir les modifier
     $post = getPostWithCategory($pdo, (int) $_GET['id']);
 
 ?>
