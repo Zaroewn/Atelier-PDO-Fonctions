@@ -4,21 +4,19 @@ require_once __DIR__.'/functions.php';
 
 $pdo = getPDO('mysql:host=localhost;dbname=blog', 'root', '');
 
+// On vérifie avec une structure conditionnelle IF que nos champs ne soit pas vide.
 if (! empty($_POST)) {
-    $errors = false;
+    $errors = [];
 
+    // Si il n'y a pas d'erreurs, on lance la suppression du post via notre fonction deletePost().
     if (! $errors) {
         deletePost($pdo, (int) $_POST['id']);
-        $errors = true;
-        echo $errors;
     }
 }
 
+// Ici on appelle notre fonction getPostsWithCategories() après la structure conditionnelle IF, pour pouvoir récupérer le nom de nos posts dans notre menu déroulant
+// pour pouvoir choisir quels posts nous voulons supprimer
 $posts = getPostsWithCategories($pdo, 1, 50);
-
-// echo '<pre>';
-// var_dump($posts);
-// echo '</pre>'; 
 
 ?>
 
